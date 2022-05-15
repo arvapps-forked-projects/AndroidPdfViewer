@@ -56,26 +56,14 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         int align, width, height;
         Drawable background;
         // determine handler position, default is right (when scrolling vertically) or bottom (when scrolling horizontally)
-        if (pdfView.isSwipeVertical()) {
-            width = HANDLE_LONG;
-            height = HANDLE_SHORT;
-            if (inverted) { // left
-                align = ALIGN_PARENT_LEFT;
-                background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_left);
-            } else { // right
-                align = ALIGN_PARENT_RIGHT;
-                background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_right);
-            }
-        } else {
-            width = HANDLE_SHORT;
-            height = HANDLE_LONG;
-            if (inverted) { // top
-                align = ALIGN_PARENT_TOP;
-                background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_top);
-            } else { // bottom
-                align = ALIGN_PARENT_BOTTOM;
-                background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_bottom);
-            }
+        width = HANDLE_LONG;
+        height = HANDLE_SHORT;
+        if (inverted) { // left
+            align = ALIGN_PARENT_LEFT;
+            background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_left);
+        } else { // right
+            align = ALIGN_PARENT_RIGHT;
+            background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_right);
         }
 
         setBackground(background);
@@ -107,7 +95,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
             handler.removeCallbacks(hidePageScrollerRunnable);
         }
         if (pdfView != null) {
-            setPosition((pdfView.isSwipeVertical() ? pdfView.getHeight() : pdfView.getWidth()) * position);
+            setPosition(pdfView.getHeight() * position);
         }
     }
 
@@ -116,11 +104,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
             return;
         }
         float pdfViewSize;
-        if (pdfView.isSwipeVertical()) {
-            pdfViewSize = pdfView.getHeight();
-        } else {
-            pdfViewSize = pdfView.getWidth();
-        }
+        pdfViewSize = pdfView.getHeight();
         pos -= relativeHandlerMiddle;
 
         if (pos < 0) {
@@ -129,11 +113,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
             pos = pdfViewSize - Util.getDP(context, HANDLE_SHORT);
         }
 
-        if (pdfView.isSwipeVertical()) {
-            setY(pos);
-        } else {
-            setX(pos);
-        }
+        setY(pos);
 
         calculateMiddle();
         invalidate();
@@ -141,15 +121,9 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
 
     private void calculateMiddle() {
         float pos, viewSize, pdfViewSize;
-        if (pdfView.isSwipeVertical()) {
-            pos = getY();
-            viewSize = getHeight();
-            pdfViewSize = pdfView.getHeight();
-        } else {
-            pos = getX();
-            viewSize = getWidth();
-            pdfViewSize = pdfView.getWidth();
-        }
+        pos = getY();
+        viewSize = getHeight();
+        pdfViewSize = pdfView.getHeight();
         relativeHandlerMiddle = ((pos + relativeHandlerMiddle) / pdfViewSize) * viewSize;
     }
 
@@ -208,19 +182,10 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
             case MotionEvent.ACTION_POINTER_DOWN:
                 pdfView.stopFling();
                 handler.removeCallbacks(hidePageScrollerRunnable);
-                if (pdfView.isSwipeVertical()) {
-                    currentPos = event.getRawY() - getY();
-                } else {
-                    currentPos = event.getRawX() - getX();
-                }
+                currentPos = event.getRawY() - getY();
             case MotionEvent.ACTION_MOVE:
-                if (pdfView.isSwipeVertical()) {
-                    setPosition(event.getRawY() - currentPos + relativeHandlerMiddle);
-                    pdfView.setPositionOffset(relativeHandlerMiddle / (float) getHeight(), false);
-                } else {
-                    setPosition(event.getRawX() - currentPos + relativeHandlerMiddle);
-                    pdfView.setPositionOffset(relativeHandlerMiddle / (float) getWidth(), false);
-                }
+                setPosition(event.getRawY() - currentPos + relativeHandlerMiddle);
+                pdfView.setPositionOffset(relativeHandlerMiddle / (float) getHeight(), false);
                 return true;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
