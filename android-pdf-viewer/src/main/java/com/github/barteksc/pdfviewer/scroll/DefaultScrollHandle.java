@@ -1,7 +1,6 @@
 package com.github.barteksc.pdfviewer.scroll;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -38,17 +37,17 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         }
     };
 
-    public DefaultScrollHandle(Context context) {
-        this(context, false);
+    public DefaultScrollHandle(Context context, int textColor, int backgroundColor) {
+        this(context, false, textColor, backgroundColor);
     }
 
-    public DefaultScrollHandle(Context context, boolean inverted) {
+    public DefaultScrollHandle(Context context, boolean inverted, int textColor, int backgroundColor) {
         super(context);
         this.context = context;
         this.inverted = inverted;
         textView = new TextView(context);
         setVisibility(INVISIBLE);
-        setTextColor(Color.BLACK);
+        setTextColor(textColor);
         setTextSize(DEFAULT_TEXT_SIZE);
     }
 
@@ -79,11 +78,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
             }
         }
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            setBackgroundDrawable(background);
-        } else {
-            setBackground(background);
-        }
+        setBackground(background);
 
         LayoutParams lp = new LayoutParams(Util.getDP(context, width), Util.getDP(context, height));
         lp.setMargins(0, 0, 0, 0);
@@ -164,8 +159,8 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
     }
 
     @Override
-    public void setPageNum(int pageNum) {
-        String text = String.valueOf(pageNum);
+    public void setPageNum(int pageNum, int pageCount) {
+        String text = pageNum + " / " + pageCount;
         if (!textView.getText().equals(text)) {
             textView.setText(text);
         }

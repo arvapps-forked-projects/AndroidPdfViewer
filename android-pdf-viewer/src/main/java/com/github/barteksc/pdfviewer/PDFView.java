@@ -325,7 +325,7 @@ public class PDFView extends RelativeLayout {
         loadPages();
 
         if (scrollHandle != null && !documentFitsView()) {
-            scrollHandle.setPageNum(currentPage + 1);
+            scrollHandle.setPageNum(currentPage + 1, pdfFile.getPagesCount());
         }
 
         callbacks.callOnPageChange(currentPage, pdfFile.getPagesCount());
