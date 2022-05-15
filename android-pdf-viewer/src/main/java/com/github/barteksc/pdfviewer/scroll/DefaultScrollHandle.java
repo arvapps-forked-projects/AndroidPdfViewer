@@ -19,9 +19,8 @@ import com.github.barteksc.pdfviewer.util.Util;
 
 public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle {
 
-    private final static int HANDLE_LONG = 65;
     private final static int HANDLE_SHORT = 40;
-    private final static int DEFAULT_TEXT_SIZE = 14;
+    private final static int DEFAULT_TEXT_SIZE = 16;
 
     private float relativeHandlerMiddle = 0f;
 
@@ -30,7 +29,6 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
     private boolean inverted;
     private PDFView pdfView;
     private float currentPos;
-    private int textColor;
     private int backgroundColor;
 
     private Handler handler = new Handler();
@@ -49,7 +47,6 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         super(context);
         this.context = context;
         this.inverted = inverted;
-        this.textColor = textColor;
         this.backgroundColor = backgroundColor;
         textView = new TextView(context);
         setVisibility(INVISIBLE);
@@ -59,10 +56,9 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
 
     @Override
     public void setupLayout(PDFView pdfView) {
-        int align, width, height;
+        int align, height;
         Drawable background;
         // determine handler position, default is right (when scrolling vertically) or bottom (when scrolling horizontally)
-        width = HANDLE_LONG;
         height = HANDLE_SHORT;
         if (inverted) { // left
             align = ALIGN_PARENT_LEFT;
@@ -75,12 +71,14 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         ((LayerDrawable) background).findDrawableByLayerId(R.id.handle_filling).mutate().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
         setBackground(background);
 
-        LayoutParams lp = new LayoutParams(Util.getDP(context, (int) (width * 1.1)), Util.getDP(context, height));
+        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Util.getDP(context, height));
         lp.setMargins(0, 0, 0, 0);
 
         LayoutParams tvlp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvlp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
+        int padding = (int) context.getResources().getDimension(R.dimen.handle_text_side_padding);
+        textView.setPadding(padding, 0, padding, 0);
         addView(textView, tvlp);
 
         lp.addRule(align);
