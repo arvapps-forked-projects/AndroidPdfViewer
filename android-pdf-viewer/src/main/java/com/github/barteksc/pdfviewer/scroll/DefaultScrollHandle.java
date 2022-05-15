@@ -68,12 +68,13 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
 
         setBackground(background);
 
-        LayoutParams lp = new LayoutParams(Util.getDP(context, width), Util.getDP(context, height));
+        LayoutParams lp = new LayoutParams(Util.getDP(context, (int) (width * 1.25)), Util.getDP(context, height));
         lp.setMargins(0, 0, 0, 0);
 
         LayoutParams tvlp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvlp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
+        textView.setPadding(0, 0, (int) (width * 0.5), 0);
         addView(textView, tvlp);
 
         lp.addRule(align);
