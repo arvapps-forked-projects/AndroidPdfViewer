@@ -83,7 +83,7 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
                 .onPageChange(this)
                 .enableAnnotationRendering(true)
                 .onLoad(this)
-                .scrollHandle(new DefaultScrollHandle(this, Color.BLACK, Color.WHITE))
+                .scrollHandle(new DefaultScrollHandle(this, Color.WHITE, Color.BLACK))
                 .spacing(10) // in dp
                 .onPageError(this)
                 .pageFitPolicy(FitPolicy.BOTH)

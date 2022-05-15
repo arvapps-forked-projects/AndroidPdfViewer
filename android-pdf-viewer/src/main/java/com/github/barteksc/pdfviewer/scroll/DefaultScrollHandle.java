@@ -1,7 +1,9 @@
 package com.github.barteksc.pdfviewer.scroll;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -19,7 +21,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
 
     private final static int HANDLE_LONG = 65;
     private final static int HANDLE_SHORT = 40;
-    private final static int DEFAULT_TEXT_SIZE = 16;
+    private final static int DEFAULT_TEXT_SIZE = 14;
 
     private float relativeHandlerMiddle = 0f;
 
@@ -28,6 +30,8 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
     private boolean inverted;
     private PDFView pdfView;
     private float currentPos;
+    private int textColor;
+    private int backgroundColor;
 
     private Handler handler = new Handler();
     private Runnable hidePageScrollerRunnable = new Runnable() {
@@ -45,6 +49,8 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         super(context);
         this.context = context;
         this.inverted = inverted;
+        this.textColor = textColor;
+        this.backgroundColor = backgroundColor;
         textView = new TextView(context);
         setVisibility(INVISIBLE);
         setTextColor(textColor);
@@ -66,15 +72,15 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
             background = ContextCompat.getDrawable(context, R.drawable.default_scroll_handle_right);
         }
 
+        ((LayerDrawable) background).findDrawableByLayerId(R.id.handle_filling).mutate().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
         setBackground(background);
 
-        LayoutParams lp = new LayoutParams(Util.getDP(context, (int) (width * 1.25)), Util.getDP(context, height));
+        LayoutParams lp = new LayoutParams(Util.getDP(context, (int) (width * 1.1)), Util.getDP(context, height));
         lp.setMargins(0, 0, 0, 0);
 
         LayoutParams tvlp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvlp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
-        textView.setPadding(0, 0, (int) (width * 0.5), 0);
         addView(textView, tvlp);
 
         lp.addRule(align);
