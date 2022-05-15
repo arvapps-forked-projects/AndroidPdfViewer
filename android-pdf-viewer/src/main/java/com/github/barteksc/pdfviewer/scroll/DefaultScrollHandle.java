@@ -52,6 +52,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         setVisibility(INVISIBLE);
         setTextColor(textColor);
         setTextSize(DEFAULT_TEXT_SIZE);
+        hideDelayed();
     }
 
     @Override
