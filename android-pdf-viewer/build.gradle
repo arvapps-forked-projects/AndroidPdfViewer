@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    api 'com.github.esensar:PdfiumAndroid:bb0ec40e6d'
+    api 'com.github.tibbi:PdfiumAndroid:ff9cdff7c8'
     api 'androidx.core:core-ktx:1.9.0'
     api 'androidx.appcompat:appcompat:1.5.1'
 }
