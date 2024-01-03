@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    api 'org.fossify:PdfiumAndroid:ed8ab300c4'
+    api 'org.fossify:PdfiumAndroid:af28434507'
     api 'androidx.core:core-ktx:1.9.0'
     api 'androidx.appcompat:appcompat:1.5.1'
 }
